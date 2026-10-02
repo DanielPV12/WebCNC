@@ -1,0 +1,17 @@
+---
+import { steps } from '../data/site';
+---
+<section id="proceso" class="bg-steel-50 py-20">
+  <div class="mx-auto max-w-6xl px-5">
+    <h2 class="text-4xl md:text-5xl">Cómo trabajamos</h2>
+    <ol class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      {steps.map(([t, d], i) => (
+        <li class="border-t-4 border-brand pt-4">
+          <span class="font-display text-4xl text-brand">{i + 1}</span>
+          <h3 class="text-2xl">{t}</h3>
+          <p class="mt-1 text-steel-600">{d}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

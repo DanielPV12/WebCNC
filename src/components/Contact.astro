@@ -1,0 +1,74 @@
+---
+import { site } from '../data/site';
+const field = 'w-full rounded border border-white/15 bg-steel-800 px-4 py-3 text-white placeholder:text-steel-200/50';
+---
+<section id="contacto" class="bg-steel-950 py-24 text-white">
+  <div class="mx-auto grid max-w-6xl gap-12 px-5 lg:grid-cols-2">
+    <div>
+      <h2 class="text-5xl md:text-6xl">Cuéntanos qué pieza necesitas</h2>
+      <p class="mt-4 max-w-md text-lg text-steel-200">Mándanos tu plano o una descripción y te respondemos con precio y tiempo de entrega.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href={`https://wa.me/${site.whatsapp}`} class="rounded bg-[#25a35a] px-6 py-3 font-semibold hover:brightness-110">WhatsApp</a>
+        <a href={`tel:${site.phone.replace(/\s/g, '')}`} class="rounded border border-white/30 px-6 py-3 font-semibold hover:bg-white/10">Llamar</a>
+      </div>
+      <dl class="mt-10 space-y-4">
+        <div><dt class="text-sm text-steel-200/70">Teléfono</dt><dd class="text-lg">{site.phone}</dd></div>
+        <div><dt class="text-sm text-steel-200/70">Correo</dt><dd class="text-lg">{site.email}</dd></div>
+        <div><dt class="text-sm text-steel-200/70">Taller</dt><dd class="text-lg">{site.address}</dd></div>
+      </dl>
+      <div class="ph mt-8 h-44 rounded">Mapa de Google (iframe)</div>
+    </div>
+
+    <form id="quote" class="space-y-4 rounded-lg bg-steel-900 p-6 md:p-8" enctype="multipart/form-data" novalidate>
+      <h3 class="text-3xl">Solicitar cotización</h3>
+      <label class="block"><span class="mb-1 block text-sm">Nombre</span><input name="nombre" required autocomplete="name" class={field} /></label>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="block"><span class="mb-1 block text-sm">Correo</span><input type="email" name="email" required autocomplete="email" class={field} /></label>
+        <label class="block"><span class="mb-1 block text-sm">Teléfono (opcional)</span><input type="tel" name="telefono" autocomplete="tel" class={field} /></label>
+      </div>
+      <label class="block"><span class="mb-1 block text-sm">Material (opcional)</span>
+        <select name="material" class={field}><option value="">Sin definir</option><option>Aluminio</option><option>Acero</option><option>Delrin / Acetal</option><option>PEEK</option><option>Otro</option></select>
+      </label>
+      <label class="block"><span class="mb-1 block text-sm">Describe tu pieza</span><textarea name="mensaje" rows="4" required class={field}></textarea></label>
+      <label class="block">
+        <span class="mb-1 block text-sm">Planos (opcional)</span>
+        <input type="file" name="planos" multiple accept=".pdf,.dwg,.dxf,.step,.stp,.iges,.igs,.stl"
+          class={`${field} file:mr-4 file:rounded file:border-0 file:bg-steel-600 file:px-3 file:py-1.5 file:text-white`} />
+        <span class="mt-1 block text-xs text-steel-200/70">PDF, DWG, DXF, STEP, IGES o STL. Hasta 3 archivos de 10 MB.</span>
+      </label>
+      <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="hidden" />
+      <button id="quote-btn" class="w-full rounded bg-brand px-6 py-3 font-semibold hover:bg-brand-dark disabled:opacity-60">Enviar cotización</button>
+      <p id="quote-status" role="status" aria-live="polite" class="min-h-6 text-sm"></p>
+    </form>
+  </div>
+</section>
+<script>
+  const form = document.getElementById('quote') as HTMLFormElement;
+  const btn = document.getElementById('quote-btn') as HTMLButtonElement;
+  const status = document.getElementById('quote-status') as HTMLElement;
+  const say = (msg: string, ok = false) => {
+    status.textContent = msg;
+    status.className = `min-h-6 text-sm ${ok ? 'text-green-400' : 'text-red-300'}`;
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+    const files = Array.from((form.elements.namedItem('planos') as HTMLInputElement).files ?? []);
+    if (files.length > 3) return say('Máximo 3 archivos.');
+    if (files.some((f) => f.size > 10 * 1024 * 1024)) return say('Cada archivo debe pesar menos de 10 MB.');
+
+    btn.disabled = true; btn.textContent = 'Enviando…'; say('');
+    try {
+      const res = await fetch('/api/contact', { method: 'POST', body: new FormData(form) });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(out.error || 'No pudimos enviar el mensaje.');
+      form.reset();
+      say('¡Listo! Recibimos tu solicitud y te responderemos pronto.', true);
+    } catch (err) {
+      say(err instanceof Error ? err.message : 'Error de conexión. Intenta por WhatsApp.');
+    } finally {
+      btn.disabled = false; btn.textContent = 'Enviar cotización';
+    }
+  });
+</script>

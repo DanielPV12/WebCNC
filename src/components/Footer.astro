@@ -1,0 +1,9 @@
+---
+import { site } from '../data/site';
+---
+<footer class="border-t border-white/10 bg-steel-950 py-8 text-sm text-steel-200/70">
+  <div class="mx-auto flex max-w-6xl flex-wrap justify-between gap-3 px-5">
+    <p>© {new Date().getFullYear()} {site.name} {site.tagline}</p>
+    <p>{site.address}</p>
+  </div>
+</footer>

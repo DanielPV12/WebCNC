@@ -1,0 +1,33 @@
+---
+import { projects } from '../data/site';
+const cats = ['Todos', ...new Set(projects.map((p) => p.cat))];
+---
+<section id="proyectos" class="bg-white py-20">
+  <div class="mx-auto max-w-6xl px-5">
+    <h2 class="text-4xl md:text-5xl">Proyectos</h2>
+    <div class="mt-6 flex flex-wrap gap-2" role="group" aria-label="Filtrar proyectos">
+      {cats.map((c, i) => (
+        <button data-filter={c} aria-pressed={i === 0} class="rounded-full border border-steel-200 px-4 py-1.5 text-sm font-medium aria-pressed:border-steel-900 aria-pressed:bg-steel-900 aria-pressed:text-white">{c}</button>
+      ))}
+    </div>
+    <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {projects.map((p) => (
+        <article data-cat={p.cat} class="overflow-hidden rounded-lg bg-steel-900 text-white">
+          <div class="ph h-56">Foto: {p.title}</div>
+          <div class="p-5">
+            <h3 class="text-2xl">{p.title}</h3>
+            <p class="text-sm text-steel-200">{p.cat} · {p.mat}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+<script>
+  const btns = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-cat]');
+  btns.forEach((b) => b.addEventListener('click', () => {
+    btns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    cards.forEach((c) => c.classList.toggle('hidden', b.dataset.filter !== 'Todos' && c.dataset.cat !== b.dataset.filter));
+  }));
+</script>

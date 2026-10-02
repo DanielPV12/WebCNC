@@ -1,0 +1,14 @@
+<button id="back-to-top" type="button" aria-label="Volver arriba"
+  class="pointer-events-none fixed right-5 bottom-5 z-40 flex size-10 items-center justify-center rounded-full border border-white/15 bg-steel-900/80 text-white opacity-0 shadow backdrop-blur transition-opacity duration-200 hover:bg-steel-800 data-[show=true]:pointer-events-auto data-[show=true]:opacity-100"
+  data-show="false">
+  <svg viewBox="0 0 24 24" class="size-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 19V5M5 12l7-7 7 7" />
+  </svg>
+</button>
+<script>
+  const btn = document.getElementById('back-to-top') as HTMLButtonElement;
+  const toggle = () => btn.dataset.show = String(window.scrollY > 600);
+  window.addEventListener('scroll', toggle, { passive: true });
+  toggle();
+  btn.addEventListener('click', () => window.scrollTo({ top: 0 }));
+</script>

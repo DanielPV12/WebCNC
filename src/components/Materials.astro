@@ -1,0 +1,21 @@
+---
+import { materials } from '../data/site';
+---
+<section id="materiales" class="bg-steel-100 py-20">
+  <div class="mx-auto max-w-6xl px-5">
+    <h2 class="text-4xl md:text-5xl">Materiales y acabados</h2>
+    <p class="mt-3 max-w-xl text-steel-600">Trabajamos metales y plásticos de ingeniería. ¿Necesitas otro? Pregúntanos.</p>
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {materials.map((m) => (
+        <article class="overflow-hidden rounded-lg border border-steel-200 bg-white">
+          <div class="ph h-36">Foto: {m.name}</div>
+          <div class="p-5">
+            <h3 class="text-2xl">{m.name}</h3>
+            <p class="text-sm font-semibold text-brand-dark">{m.grades}</p>
+            <p class="mt-2 text-steel-600">{m.use}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

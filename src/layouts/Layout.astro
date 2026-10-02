@@ -1,0 +1,17 @@
+---
+import '../styles/global.css';
+const { title = 'CNC Tijuana Automotriz | Maquinado CNC de precisión' } = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Maquinado CNC de 3, 4 y 5 ejes en Tijuana. Piezas automotrices e industriales, prototipos y refacciones." />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body><slot /></body>
+</html>
